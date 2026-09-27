@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const ECHO_VERSION='1.5.0';
+  const ECHO_VERSION='1.5.2';
   const ECHO_ROUNDS=6;
   const PALETTE=[
     {name:'Aqua',hex:'#54e6ff',pitch:523.25},
@@ -17,7 +17,7 @@
 
   MODES.echo={title:'Echo Orbit',rounds:ECHO_ROUNDS};
   modeNames.echo='Echo Orbit';
-  MODE_HELP.echo='Observe la séquence de satellites qui s’illuminent, puis reproduis-la dans le même ordre. Aux niveaux élevés, les orbites bougent, s’inversent et se reconfigurent après la mémorisation.';
+  MODE_HELP.echo='Regarde quelles planètes s’allument. Mémorise leur ordre, puis touche exactement les mêmes planètes dans le même ordre. En Expert et Maître seulement, l’orbite peut ensuite changer.';
   BADGES.echo={icon:'◌',title:'Mémoire orbitale',desc:'Atteindre 85 % à Echo Orbit en difficulté Difficile ou supérieure.'};
   defaultData.best.echo=0;
   data.best.echo ??= 0;
@@ -76,7 +76,7 @@
       rings:d>=4?2:1,
       pulse:[0,560,500,450,405,360][d],
       recall:[0,10500,9800,9000,8200,7600][d],
-      rotate:d>=2,
+      rotate:d>=4,
       reconfigure:d>=4,
       reverse:d>=5|| (d===4&&round>=4)
     };
@@ -106,7 +106,7 @@
 
   function nodeMarkup(n){
     const p=PALETTE[n.palette],radius=n.ring===2?'clamp(72px,23vw,145px)':'clamp(108px,34vw,205px)';
-    return `<button class="echo-satellite ring-${n.ring}" data-node="${n.id}" aria-label="Satellite ${p.name}" style="--angle:${n.angle}deg;--radius:${radius};--echo:${p.hex};--delay:${n.id*-.19}s"><span><i></i></span></button>`;
+    return `<button class="echo-satellite ring-${n.ring}" data-node="${n.id}" aria-label="Planète ${p.name}, repère ${n.id+1}" style="--angle:${n.angle}deg;--radius:${radius};--echo:${p.hex};--delay:${n.id*-.19}s"><span><i class="echo-node-id">${n.id+1}</i></span></button>`;
   }
 
   function renderArena(cfg){
@@ -115,7 +115,7 @@
     $('playStage').innerHTML=`
       <div class="echo-wrap">
         <div class="echo-head glass">
-          <div><span class="echo-kicker">MÉMOIRE ORBITALE</span><strong id="echoInstruction">Observe la séquence</strong><small id="echoSub">${state.sequence.length} impulsions à retenir</small></div>
+          <div><span class="echo-kicker">MÉMOIRE ORBITALE</span><strong id="echoInstruction">Observe les planètes</strong><small id="echoSub">Mémorise leur ordre : 1re, 2e, 3e…</small></div>
           <span class="echo-level">${DIFF_NAMES[d]}</span>
         </div>
         <div class="echo-sequence-meter"><span>ÉCHO</span><div class="echo-steps">${steps}</div><b id="echoProgress">0/${state.sequence.length}</b></div>
@@ -127,7 +127,7 @@
           <div class="echo-satellites" id="echoSatellites">${state.nodes.map(nodeMarkup).join('')}</div>
           <div class="echo-halo" aria-hidden="true"></div>
         </div>
-        <div class="echo-foot"><span>${cfg.reconfigure?'Les satellites peuvent changer de position après le signal':'Mémorise l’ordre, pas seulement la position'}</span><span>${cfg.reverse?'↺ inversion possible':'◌ reste concentré'}</span></div>
+        <div class="echo-foot"><span>${cfg.reconfigure?'Après le signal, retrouve les mêmes planètes malgré le déplacement':'Quand le signal finit, touche les mêmes planètes dans le même ordre'}</span><span>${cfg.reverse?'↺ inversion possible':'◌ reste concentré'}</span></div>
       </div>`;
     document.querySelectorAll('.echo-satellite').forEach(btn=>btn.disabled=true);
   }
@@ -137,9 +137,9 @@
   }
 
   function pulseNode(id,stepIndex){
-    document.querySelectorAll('.echo-satellite').forEach(x=>x.classList.remove('pulse'));
+    document.querySelectorAll('.echo-satellite').forEach(x=>{x.classList.remove('pulse');x.removeAttribute('data-pulse-order')});
     const btn=document.querySelector(`.echo-satellite[data-node="${id}"]`);if(!btn)return;
-    btn.classList.add('pulse');setStep(stepIndex,'seen');echoTone(id);haptic(5);
+    btn.dataset.pulseOrder=String(stepIndex+1);btn.classList.add('pulse');setStep(stepIndex,'seen');echoTone(id);haptic(5);
   }
 
   function reconfigureOrbit(cfg){
@@ -158,8 +158,8 @@
     if(current.locked)return;
     state.phase='recall';state.input=[];
     if(cfg.reconfigure)reconfigureOrbit(cfg);
-    $('echoInstruction').textContent=cfg.reconfigure?'ORBIT SHIFT — reproduis':'À toi — reproduis la séquence';
-    $('echoSub').textContent='Même ordre, mêmes satellites';
+    $('echoInstruction').textContent=cfg.reconfigure?'ORBIT SHIFT — retrouve-les':'À toi — touche les mêmes planètes';
+    $('echoSub').textContent='Dans exactement le même ordre';
     document.querySelectorAll('.echo-step').forEach(x=>x.classList.remove('seen'));
     const wire=()=>document.querySelectorAll('.echo-satellite').forEach(btn=>{
       btn.disabled=false;btn.onclick=()=>handleInput(Number(btn.dataset.node),btn,cfg);
