@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const ECHO_VERSION='1.5.2';
+  const ECHO_VERSION='1.6.0';
   const ECHO_ROUNDS=6;
   const PALETTE=[
     {name:'Aqua',hex:'#54e6ff',pitch:523.25},
@@ -76,9 +76,9 @@
       rings:d>=4?2:1,
       pulse:[0,560,500,450,405,360][d],
       recall:[0,10500,9800,9000,8200,7600][d],
-      rotate:d>=4,
-      reconfigure:d>=4,
-      reverse:d>=5|| (d===4&&round>=4)
+      rotate:false,
+      reconfigure:false,
+      reverse:false
     };
   }
 
@@ -118,7 +118,7 @@
           <div><span class="echo-kicker">MÉMOIRE ORBITALE</span><strong id="echoInstruction">Observe les planètes</strong><small id="echoSub">Mémorise leur ordre : 1re, 2e, 3e…</small></div>
           <span class="echo-level">${DIFF_NAMES[d]}</span>
         </div>
-        <div class="echo-sequence-meter"><span>ÉCHO</span><div class="echo-steps">${steps}</div><b id="echoProgress">0/${state.sequence.length}</b></div>
+        <div class="echo-sequence-meter"><span id="echoPhaseLabel">OBSERVE</span><div class="echo-steps">${steps}</div><b id="echoProgress">0/${state.sequence.length}</b></div>
         <div class="echo-space ${cfg.rings===2?'dual-ring':''} ${cfg.rotate?'is-rotating':''}" id="echoSpace" style="--echo-direction:${state.direction}">
           <div class="echo-stars" aria-hidden="true"></div>
           <div class="echo-ring echo-ring-outer"></div>
@@ -137,9 +137,15 @@
   }
 
   function pulseNode(id,stepIndex){
-    document.querySelectorAll('.echo-satellite').forEach(x=>{x.classList.remove('pulse');x.removeAttribute('data-pulse-order')});
+    document.querySelectorAll('.echo-satellite').forEach(x=>{x.classList.remove('pulse','echo-dim');x.removeAttribute('data-pulse-order')});
+    document.querySelectorAll('.echo-satellite').forEach(x=>{if(Number(x.dataset.node)!==id)x.classList.add('echo-dim')});
     const btn=document.querySelector(`.echo-satellite[data-node="${id}"]`);if(!btn)return;
-    btn.dataset.pulseOrder=String(stepIndex+1);btn.classList.add('pulse');setStep(stepIndex,'seen');echoTone(id);haptic(5);
+    btn.dataset.pulseOrder=String(stepIndex+1);btn.classList.add('pulse');
+    const label=$('echoInstruction'),sub=$('echoSub'),progress=$('echoProgress');
+    if(label)label.textContent=`Planète ${stepIndex+1} sur ${state.sequence.length}`;
+    if(sub)sub.textContent=`Repère ${id+1} — mémorise cette planète`;
+    if(progress)progress.textContent=`${stepIndex+1}/${state.sequence.length}`;
+    echoTone(id);haptic(5);
   }
 
   function reconfigureOrbit(cfg){
@@ -157,10 +163,13 @@
   function beginRecall(cfg){
     if(current.locked)return;
     state.phase='recall';state.input=[];
+    document.querySelectorAll('.echo-satellite').forEach(x=>{x.classList.remove('pulse','echo-dim');x.removeAttribute('data-pulse-order')});
+    if($('echoPhaseLabel'))$('echoPhaseLabel').textContent='À TOI';
+    if($('echoProgress'))$('echoProgress').textContent=`0/${state.sequence.length}`;
     if(cfg.reconfigure)reconfigureOrbit(cfg);
     $('echoInstruction').textContent=cfg.reconfigure?'ORBIT SHIFT — retrouve-les':'À toi — touche les mêmes planètes';
     $('echoSub').textContent='Dans exactement le même ordre';
-    document.querySelectorAll('.echo-step').forEach(x=>x.classList.remove('seen'));
+    
     const wire=()=>document.querySelectorAll('.echo-satellite').forEach(btn=>{
       btn.disabled=false;btn.onclick=()=>handleInput(Number(btn.dataset.node),btn,cfg);
     });
@@ -173,7 +182,7 @@
     const intro=520;
     state.sequence.forEach((id,i)=>later(()=>pulseNode(id,i),intro+i*cfg.pulse));
     later(()=>{
-      document.querySelectorAll('.echo-satellite').forEach(x=>x.classList.remove('pulse'));
+      document.querySelectorAll('.echo-satellite').forEach(x=>{x.classList.remove('pulse','echo-dim');x.removeAttribute('data-pulse-order')});
       beginRecall(cfg);
     },intro+state.sequence.length*cfg.pulse+180);
   }
