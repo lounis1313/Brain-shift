@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.2 — Playful sound design
+
+- Reworked the full audio identity so events are clearly distinguishable by ear.
+- Added bubble pops, plucked tones, sparkle bursts, light noise transients and stereo movement.
+- Correct, error, combo, reward, badge, record, level-up and Coach cues now use different rhythmic and tonal signatures.
+- Kept the engine Web Audio-only: lightweight, offline and license-free.
+
 ## 1.2.1 — Interactive sound polish
 
 - Added a custom Brain Shift sound identity generated with Web Audio.

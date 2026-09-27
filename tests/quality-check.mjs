@@ -16,7 +16,7 @@ assert.match(index, /lang="fr"/i, 'HTML language must be French');
 assert.match(index, /viewport-fit=cover/, 'Safe-area viewport support missing');
 assert.match(index, /pro\.css/, 'Professional CSS layer is not loaded');
 assert.match(index, /pro\.js/, 'Professional JS layer is not loaded');
-assert.match(app, /APP_VERSION="1\.2\.1"/, 'App version mismatch');
+assert.match(app, /APP_VERSION="1\.2\.2"/, 'App version mismatch');
 assert.equal(manifest.start_url, './', 'PWA start_url must stay relative for GitHub Pages');
 assert.equal(manifest.scope, './', 'PWA scope must stay relative for GitHub Pages');
 assert.ok(manifest.icons?.some(x=>x.sizes==='192x192'), '192px icon missing');
@@ -26,6 +26,7 @@ assert.match(sw, /pro\.js/, 'Service worker must cache pro.js');
 assert.match(sw, /SKIP_WAITING/, 'Service worker update hook missing');
 assert.match(pro, /function soundFx/, 'Interactive sound engine missing');
 assert.match(pro, /AudioContext|webkitAudioContext/, 'Web Audio support missing');
+assert.match(pro, /function (bubble|pluck|sparkle)/, 'Playful sound primitives missing');
 assert.doesNotMatch(app+pro, /\beval\s*\(/, 'eval() is not allowed');
 
 console.log('✓ Brain Shift quality checks passed');
