@@ -188,3 +188,5 @@ jobs:
           git add -A
           git commit -m "Release Brain Shift 1.2.2 playful sound design"
           git push
+
+# trigger
