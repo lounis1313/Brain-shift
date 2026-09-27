@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const ECHO_VERSION='1.6.0';
+  const ECHO_VERSION='1.7.0';
   const ECHO_ROUNDS=6;
   const PALETTE=[
     {name:'Aqua',hex:'#54e6ff',pitch:523.25},
@@ -25,7 +25,7 @@
   data.recent.echo ??= [];
   saveData();
 
-  const state={nodes:[],sequence:[],input:[],phase:'idle',rotationShift:0,direction:1,ringCount:1,presentTimers:[]};
+  const state={nodes:[],sequence:[],input:[],phase:'idle',rotationShift:0,direction:1,ringCount:1,presentTimers:[],difficultyOverride:null};
 
   const previousModeIcon=modeIcon;
   modeIcon=function(mode){
@@ -106,17 +106,17 @@
 
   function nodeMarkup(n){
     const p=PALETTE[n.palette],radius=n.ring===2?'clamp(72px,23vw,145px)':'clamp(108px,34vw,205px)';
-    return `<button class="echo-satellite ring-${n.ring}" data-node="${n.id}" aria-label="Planète ${p.name}, repère ${n.id+1}" style="--angle:${n.angle}deg;--radius:${radius};--echo:${p.hex};--delay:${n.id*-.19}s"><span><i class="echo-node-id">${n.id+1}</i></span></button>`;
+    return `<button class="echo-satellite ring-${n.ring}" data-node="${n.id}" aria-label="Planète ${p.name}" style="--angle:${n.angle}deg;--radius:${radius};--echo:${p.hex};--delay:${n.id*-.19}s"><span><i class="echo-node-mark" aria-hidden="true"></i></span></button>`;
   }
 
   function renderArena(cfg){
-    const d=effectiveDifficulty('echo');
+    const d=state.difficultyOverride||effectiveDifficulty('echo');
     const steps=state.sequence.map((_,i)=>`<i class="echo-step" data-step="${i}"></i>`).join('');
     $('playStage').innerHTML=`
       <div class="echo-wrap">
         <div class="echo-head glass">
           <div><span class="echo-kicker">MÉMOIRE ORBITALE</span><strong id="echoInstruction">Observe les planètes</strong><small id="echoSub">Mémorise leur ordre : 1re, 2e, 3e…</small></div>
-          <span class="echo-level">${DIFF_NAMES[d]}</span>
+          <label class="echo-difficulty" aria-label="Difficulté Echo Orbit"><span>Niveau</span><select id="echoDifficulty">${[1,2,3,4,5].map(x=>`<option value="${x}" ${x===d?'selected':''}>${DIFF_NAMES[x]}</option>`).join('')}</select></label>
         </div>
         <div class="echo-sequence-meter"><span id="echoPhaseLabel">OBSERVE</span><div class="echo-steps">${steps}</div><b id="echoProgress">0/${state.sequence.length}</b></div>
         <div class="echo-space ${cfg.rings===2?'dual-ring':''} ${cfg.rotate?'is-rotating':''}" id="echoSpace" style="--echo-direction:${state.direction}">
@@ -143,7 +143,7 @@
     btn.dataset.pulseOrder=String(stepIndex+1);btn.classList.add('pulse');
     const label=$('echoInstruction'),sub=$('echoSub'),progress=$('echoProgress');
     if(label)label.textContent=`Planète ${stepIndex+1} sur ${state.sequence.length}`;
-    if(sub)sub.textContent=`Repère ${id+1} — mémorise cette planète`;
+    if(sub)sub.textContent='Mémorise cette planète';
     if(progress)progress.textContent=`${stepIndex+1}/${state.sequence.length}`;
     echoTone(id);haptic(5);
   }
@@ -214,9 +214,9 @@
   }
 
   function echoRound(){
-    clearEchoTimers();current.locked=false;const d=effectiveDifficulty('echo'),cfg=config(d,current.round);
+    clearEchoTimers();current.locked=false;const d=state.difficultyOverride||effectiveDifficulty('echo'),cfg=config(d,current.round);
     state.direction=(current.round%2?1:-1);state.nodes=buildNodes(cfg);state.sequence=buildSequence(cfg);state.input=[];state.phase='intro';state.ringCount=cfg.rings;state.rotationShift=0;
-    renderArena(cfg);$('timerMeter').style.width='100%';presentSequence(cfg);
+    renderArena(cfg);const picker=$('echoDifficulty');if(picker)picker.onchange=()=>{state.difficultyOverride=Number(picker.value);clearEchoTimers();stopTimer();echoRound()};$('timerMeter').style.width='100%';presentSequence(cfg);
   }
 
   const prevStartGame=startGame;
