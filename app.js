@@ -6,12 +6,12 @@ const MODES = {
   stroop:{title:"Stroop Couleurs", rounds:12}
 };
 const modeNames={memory:"Mémoire Flash",math:"Calcul Express",odd:"Intrus Visuel",sequence:"Suite Logique",stroop:"Stroop Couleurs"};
-const APP_VERSION="1.5.1";
+const APP_VERSION="2.1.0";
 const MODE_HELP={
  memory:"Mémorise les cases illuminées puis retouche exactement les mêmes. La grille, le nombre de cases et le temps d’exposition évoluent avec ton niveau.",
  math:"Résous l’opération avant la fin du chrono. Plus tu réponds vite et juste, plus ton combo et ton score montent.",
  odd:"Un seul élément est différent. Repère-le au plus vite sans te précipiter : une erreur termine la manche.",
- sequence:"Trouve le nombre manquant ou suivant. Les règles deviennent progressivement plus subtiles.",
+ sequence:"Trouve le terme manquant ou suivant. Les règles mélangent nombres, lettres, symboles et transformations visuelles selon ton niveau.",
  stroop:"Suis uniquement la consigne : parfois la couleur de l’encre, parfois le mot écrit. Ignore l’information parasite."
 };
 const BADGES={
@@ -253,21 +253,56 @@ function judge(ok,b,onGood){if(current.locked)return;current.locked=true;const s
 function timeoutRound(){if(current.locked)return;current.locked=true;record(false);addSpeedSample(0);current.combo=0;feedback(false);safeTimeout(nextRound,520)}
 
 function oddRound(){
-  const d=effectiveDifficulty(current.mode),pools={1:[["●","○"],["▲","△"],["■","□"],["◆","◇"],["★","☆"],["8","6"]],2:[["→","↗"],["←","↖"],["8","B"],["6","9"],["✦","✧"],["C","G"],["O","0"],["1","I"]],3:[["◀","◁"],["⊕","⊗"],["↘","↙"],["M","N"],["E","F"],["3","8"],["S","5"],["q","p"]],4:[["⊙","⊚"],["↔","↕"],["◒","◓"],["⊂","⊃"],["≠","≈"],["b","d"],["P","R"],["7","1"]],5:[["⋖","⋗"],["⟲","⟳"],["⊏","⊐"],["∩","∪"],["⊞","⊟"],["rn","m"],["vv","w"],["cl","d"]]};
-  const side=[0,4,5,5,6,7][d],n=side*side,choice=chooseFresh("odd",()=>({pair:pools[d][rnd(0,pools[d].length-1)],odd:rnd(0,n-1)}),x=>`${d}:${x.pair.join("|")}:${x.odd}`),p=choice.pair,odd=choice.odd,font=d===5?"18px":"24px";
-  $("playStage").innerHTML=`<div class="prompt">${DIFF_NAMES[d]} · trouve l’intrus</div><div class="odd-grid" style="grid-template-columns:repeat(${side},1fr)">${Array.from({length:n},(_,i)=>`<button class="odd-cell" aria-label="Élément ${i+1}" style="font-size:${font}" data-ok="${i===odd}">${i===odd?p[1]:p[0]}</button>`).join("")}</div>`;
+  const d=effectiveDifficulty(current.mode);
+  const glyphPools={
+    1:[["●","○"],["▲","△"],["■","□"],["◆","◇"],["★","☆"],["8","6"]],
+    2:[["→","↗"],["←","↖"],["8","B"],["6","9"],["✦","✧"],["C","G"],["O","0"],["1","I"]],
+    3:[["◀","◁"],["⊕","⊗"],["↘","↙"],["M","N"],["E","F"],["3","8"],["S","5"],["q","p"]],
+    4:[["⊙","⊚"],["↔","↕"],["◒","◓"],["⊂","⊃"],["≠","≈"],["b","d"],["P","R"],["7","1"]],
+    5:[["⋖","⋗"],["⟲","⟳"],["⊏","⊐"],["∩","∪"],["⊞","⊟"],["rn","m"],["vv","w"],["cl","d"]]
+  };
+  const side=[0,4,5,5,6,7][d],n=side*side;
+  const choice=chooseFresh("odd",()=>{
+    const useTransform=d>=2&&Math.random()<(d>=4?.62:.34);
+    if(useTransform){
+      const shape=["◆","▲","■","✦","⬟"][rnd(0,4)],rot=[0,45,90,135,180,225,270,315][rnd(0,7)];
+      const delta=d<=2?45:[30,45,60,90][rnd(0,3)];
+      return {kind:"transform",shape,rot,oddRot:(rot+delta)%360,odd:rnd(0,n-1)};
+    }
+    const pair=glyphPools[d][rnd(0,glyphPools[d].length-1)];
+    return {kind:"glyph",pair,odd:rnd(0,n-1)};
+  },x=>x.kind==="transform"?`${d}:t:${x.shape}:${x.rot}:${x.oddRot}:${x.odd}`:`${d}:g:${x.pair.join("|")}:${x.odd}`);
+  const odd=choice.odd,font=d===5?"18px":"24px";
+  const cells=Array.from({length:n},(_,i)=>{
+    const content=choice.kind==="transform"
+      ?`<span class="odd-transform" style="transform:rotate(${i===odd?choice.oddRot:choice.rot}deg)">${choice.shape}</span>`
+      :(i===odd?choice.pair[1]:choice.pair[0]);
+    return `<button class="odd-cell" aria-label="Élément ${i+1}" style="font-size:${font}" data-ok="${i===odd}">${content}</button>`;
+  }).join("");
+  $("playStage").innerHTML=`<div class="prompt">${DIFF_NAMES[d]} · trouve l’intrus</div><div class="odd-grid" style="grid-template-columns:repeat(${side},1fr)">${cells}</div>`;
   runTimer([0,11500,10000,8500,7200,6000][d],timeoutRound);
   document.querySelectorAll(".odd-cell").forEach(b=>b.onclick=()=>{if(current.locked)return;const ok=b.dataset.ok==="true",sp=speedFraction();current.locked=true;stopTimer();record(ok);addSpeedSample(ok?sp:0);if(!ok){b.classList.add("bad");feedback(false);document.querySelectorAll(".odd-cell").forEach(x=>{x.disabled=true;if(x.dataset.ok==="true")x.classList.add("correct")});safeTimeout(nextRound,600);return}current.combo++;current.maxCombo=Math.max(current.maxCombo,current.combo);setScore(150*difficultyBonus(current.mode)*(1+.55*sp));b.classList.add("good");feedback(true);safeTimeout(nextRound,450)});
 }
 
 function buildSequenceCandidate(){
-  const d=effectiveDifficulty(current.mode);
-  let arr=[],desc="";
-  const len=6;
-  if(d===1){
+  const d=effectiveDifficulty(current.mode),len=6;
+  let arr=[],kind="number";
+  if(d>=2&&Math.random()<(d>=4?.48:.28)){
+    kind="symbol";
+    const sets=[
+      ["▲","▶","▼","◀","▲","▶"],
+      ["●","○","●","○","●","○"],
+      ["◆","◇","◇","◆","◇","◇"],
+      ["✦","✦","✧","✦","✦","✧"]
+    ];
+    arr=[...sets[rnd(0,sets.length-1)]];
+  }else if(d>=3&&Math.random()<(d>=5?.42:.25)){
+    kind="letter";
+    const start=rnd(0,10),step=d>=4?rnd(2,4):rnd(1,3);
+    arr=Array.from({length:len},(_,i)=>String.fromCharCode(65+(start+i*step)%26));
+  }else if(d===1){
     const type=rnd(0,1),start=rnd(1,12),step=rnd(2,8);
     arr=Array.from({length:len},(_,i)=>type===0?start+i*step:start+(len-1-i)*step);
-    desc=type===0?`+${step}`:`−${step}`;
   }else if(d===2){
     const type=rnd(0,3);
     if(type===0){const s=rnd(1,10),k=rnd(2,9);arr=Array.from({length:len},(_,i)=>s+i*k)}
@@ -297,17 +332,23 @@ function buildSequenceCandidate(){
     else{arr=Array.from({length:len},(_,i)=>(i+1)*(i+1)*(i+1))}
   }
   const missing=d<=2?len-1:rnd(2,len-1),ans=arr[missing];
-  return {arr,missing,ans,desc};
+  return {arr,missing,ans,kind};
 }
 function buildSequence(){return chooseFresh("sequence",buildSequenceCandidate,x=>`${x.arr.join(",")}|${x.missing}`)}
 
 function sequenceRound(){
   const d=effectiveDifficulty(current.mode),s=buildSequence(),shown=[...s.arr];shown[s.missing]="?";
-  const spread=Math.max(6,Math.round(Math.abs(s.ans)*.18)+4),opts=uniqueOptions(s.ans,spread,true);
+  let opts;
+  if(s.kind==="number"){
+    const spread=Math.max(6,Math.round(Math.abs(s.ans)*.18)+4);opts=uniqueOptions(s.ans,spread,true);
+  }else{
+    const pool=s.kind==="letter"?"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""):["▲","▶","▼","◀","●","○","◆","◇","✦","✧"];
+    opts=shuffle([...new Set([s.ans,...shuffle(pool.filter(x=>x!==s.ans)).slice(0,3)])]).slice(0,4);
+  }
   $("playStage").innerHTML=`<div class="prompt">${DIFF_NAMES[d]} · trouve le terme manquant</div>
-  <div class="sequence-row">${shown.map(v=>`<div class="seq">${v}</div>`).join("")}</div>
+  <div class="sequence-row ${s.kind!=="number"?"sequence-visual":""}">${shown.map(v=>`<div class="seq">${v}</div>`).join("")}</div>
   <div class="answer-grid">${opts.map(v=>`<button class="answer" data-v="${v}">${v}</button>`).join("")}</div>`;
-  document.querySelectorAll(".answer").forEach(b=>b.onclick=()=>judge(Number(b.dataset.v)===s.ans,b,sp=>setScore((118+current.combo*10)*difficultyBonus(current.mode)*(1+.35*sp))));
+  document.querySelectorAll(".answer").forEach(b=>b.onclick=()=>judge(String(b.dataset.v)===String(s.ans),b,sp=>setScore((118+current.combo*10)*difficultyBonus(current.mode)*(1+.35*sp))));
   runTimer([0,13500,12000,10000,8500,7000][d],timeoutRound);
 }
 
