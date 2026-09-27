@@ -30,3 +30,9 @@
 .reduce-anim .echo-space::before,.reduce-anim .echo-space.is-rotating .echo-satellites,.reduce-anim .echo-space.is-rotating .echo-satellite>span,.reduce-anim .echo-core::before,.reduce-anim .echo-core::after,.reduce-anim .echo-halo{animation:none!important}
 @media(max-width:560px){.echo-wrap{gap:11px}.echo-head{padding:12px 13px;border-radius:17px}.echo-head small{font-size:11px}.echo-space{width:min(88vw,430px)}.echo-foot{font-size:9px}.echo-satellite{--size:clamp(38px,10.5vw,50px)}.echo-ribbon{top:7px;right:7px}}
 @media(max-height:740px) and (max-width:560px){.echo-space{width:min(72vw,360px)}.echo-head small,.echo-foot{display:none}.echo-wrap{gap:8px}}
+/* Echo Orbit 1.5.2 — clearer identity and sequence feedback */
+.echo-satellite>span{overflow:visible}
+.echo-node-id{position:absolute;inset:auto;left:50%;top:50%;transform:translate(-50%,-50%);width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:900;color:#071226;background:rgba(245,253,255,.88);box-shadow:0 0 10px rgba(255,255,255,.35);z-index:3}
+.echo-satellite.pulse>span{filter:saturate(1.65) brightness(1.18);outline:3px solid var(--echo);outline-offset:4px}
+.echo-satellite.pulse::after{content:attr(data-pulse-order);position:absolute;left:50%;top:-15px;transform:translateX(-50%);z-index:12;min-width:25px;height:25px;padding:0 5px;border-radius:999px;display:grid;place-items:center;font-size:12px;font-weight:950;color:#061225;background:var(--echo);border:2px solid rgba(255,255,255,.9);box-shadow:0 0 20px var(--echo)}
+.echo-satellite.pulse .echo-node-id{background:#fff;color:#071226;box-shadow:0 0 18px #fff,0 0 30px var(--echo)}
