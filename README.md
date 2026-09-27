@@ -1,4 +1,4 @@
-# Brain Shift 1.2 — NOVELYX Studio
+# Brain Shift 1.4 — NOVELYX Studio
 
 [![Brain Shift Quality](https://github.com/lounis1313/Brain-shift/actions/workflows/quality.yml/badge.svg)](https://github.com/lounis1313/Brain-shift/actions/workflows/quality.yml)
 
@@ -10,9 +10,10 @@ Brain Shift est une PWA mobile-first d’entraînement cérébral ludique : mém
 
 Le jeu peut être installé directement depuis un navigateur compatible et fonctionne hors ligne après mise en cache.
 
-## Expérience 1.2
+## Expérience 1.4
 
-- 5 mini-jeux adaptatifs : Mémoire Flash, Calcul Express, Intrus Visuel, Suite Logique et Stroop Couleurs.
+- 6 mini-jeux adaptatifs : Mémoire Flash, Calcul Express, Intrus Visuel, Suite Logique, Stroop Couleurs et **Shift Reactor**.
+- **Shift Reactor**, jeu signature : règles visuelles combinées, inhibition, adaptation rapide et changements de règle en pleine manche.
 - 5 niveaux de difficulté + mode Auto personnalisé par discipline.
 - **Coach NOVELYX** : programme guidé qui cible les compétences à renforcer.
 - Profil de compétences, suivi sur 7 jours, records et historique récent.

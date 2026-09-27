@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.4.0 — Shift Reactor
+
+- Added **Shift Reactor**, Brain Shift’s first signature game.
+- Added an animated premium reactor arena with colored shapes, energy feedback and responsive touch targets.
+- Added adaptive rule families across five difficulty levels: color, shape, parity, conjunction, exclusion, OR and XOR logic.
+- Added mid-round **SHIFT** transitions at higher difficulties so the active rule can change without leaving the session.
+- Integrated Reactor scoring, records, Auto difficulty, statistics, tutorial, random-game selection and a dedicated achievement.
+- Added offline caching and automated quality checks for the new game layer.
+
 ## 1.3.0 — Premium sampled audio
 
 - Replaced the primary gameplay feedback with ten real short MP3 micro-samples.

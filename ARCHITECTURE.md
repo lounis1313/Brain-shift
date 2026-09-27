@@ -6,8 +6,10 @@ Brain Shift is a zero-backend, mobile-first PWA designed to remain lightweight, 
 
 - `index.html` — semantic application shell and accessible navigation.
 - `styles.css` — core design system and responsive layout.
-- `app.js` — game engine, persistence, scoring, difficulty, PWA install hooks and the five cognitive mini-games.
-- `pro.css` — version 1.2 product-polish layer.
+- `app.js` — core game engine, persistence, scoring, difficulty and PWA install hooks.
+- `reactor.js` — Shift Reactor signature-game engine, adaptive rule generation and mid-round rule switching.
+- `reactor.css` — premium Reactor arena, motion, responsive shapes and reduced-motion support.
+- `pro.css` — product-polish layer.
 - `pro.js` — Coach NOVELYX, skill profile, seven-day activity view, enhanced game feedback and update UX.
 - `manifest.webmanifest` — PWA metadata and launcher icons.
 - `sw.js` — offline cache and service-worker lifecycle.

@@ -6,23 +6,29 @@ const read = p => fs.readFileSync(new URL(`../${p}`, import.meta.url), 'utf8');
 const index = read('index.html');
 const app = read('app.js');
 const pro = read('pro.js');
+const reactor = read('reactor.js');
 const sw = read('sw.js');
 const manifest = JSON.parse(read('manifest.webmanifest'));
 
 execFileSync(process.execPath, ['--check', new URL('../app.js', import.meta.url).pathname], {stdio:'inherit'});
 execFileSync(process.execPath, ['--check', new URL('../pro.js', import.meta.url).pathname], {stdio:'inherit'});
+execFileSync(process.execPath, ['--check', new URL('../reactor.js', import.meta.url).pathname], {stdio:'inherit'});
 
 assert.match(index, /lang="fr"/i, 'HTML language must be French');
 assert.match(index, /viewport-fit=cover/, 'Safe-area viewport support missing');
 assert.match(index, /pro\.css/, 'Professional CSS layer is not loaded');
 assert.match(index, /pro\.js/, 'Professional JS layer is not loaded');
-assert.match(app, /APP_VERSION="1\.3\.0"/, 'App version mismatch');
+assert.match(index, /reactor\.css/, 'Shift Reactor CSS is not loaded');
+assert.match(index, /reactor\.js/, 'Shift Reactor JS is not loaded');
+assert.match(app, /APP_VERSION="1\.4\.0"/, 'App version mismatch');
 assert.equal(manifest.start_url, './', 'PWA start_url must stay relative for GitHub Pages');
 assert.equal(manifest.scope, './', 'PWA scope must stay relative for GitHub Pages');
 assert.ok(manifest.icons?.some(x=>x.sizes==='192x192'), '192px icon missing');
 assert.ok(manifest.icons?.some(x=>x.sizes==='512x512'), '512px icon missing');
 assert.match(sw, /pro\.css/, 'Service worker must cache pro.css');
 assert.match(sw, /pro\.js/, 'Service worker must cache pro.js');
+assert.match(sw, /reactor\.css/, 'Service worker must cache reactor.css');
+assert.match(sw, /reactor\.js/, 'Service worker must cache reactor.js');
 assert.match(sw, /SKIP_WAITING/, 'Service worker update hook missing');
 assert.match(pro, /function soundFx/, 'Interactive sound engine missing');
 assert.match(pro, /AudioContext|webkitAudioContext/, 'Web Audio support missing');
@@ -30,6 +36,10 @@ assert.match(pro, /function (bubble|pluck|sparkle)/, 'Playful sound primitives m
 assert.match(pro, /PREMIUM_SFX/, 'Premium sampled audio bank missing');
 assert.match(sw, /assets\/audio\/correct\.mp3/, 'Premium audio must be cached offline');
 ['tap','start','correct','wrong','combo','finish','reward','badge','record','level'].forEach(name=>assert.ok(fs.existsSync(new URL(`../assets/audio/${name}.mp3`, import.meta.url)), `Missing premium sample: ${name}`));
-assert.doesNotMatch(app+pro, /\beval\s*\(/, 'eval() is not allowed');
+assert.match(reactor, /Shift Reactor/, 'Shift Reactor mode missing');
+assert.match(reactor, /MODES\.reactor/, 'Shift Reactor must register as a game mode');
+assert.match(reactor, /function reactorStage/, 'Shift Reactor stage engine missing');
+assert.match(reactor, /showShiftTransition/, 'Shift Reactor rule-shift mechanic missing');
+assert.doesNotMatch(app+pro+reactor, /\beval\s*\(/, 'eval() is not allowed');
 
 console.log('✓ Brain Shift quality checks passed');
