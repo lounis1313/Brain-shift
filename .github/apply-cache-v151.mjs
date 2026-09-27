@@ -20,7 +20,8 @@ write('index.html',index);
 
 let sw=read('sw.js');
 sw=replace(sw,'const CACHE="brain-shift-v1.5.0";','const CACHE="brain-shift-v1.5.1";','cache version');
-sw=replace(sw,'"./echo-orbit.css","./echo-orbit.js",','"./echo-orbit.css","./echo-orbit.js","./echo-orbit.css?v=1.5.1","./echo-orbit.js?v=1.5.1",','versioned echo assets');
+sw=replace(sw,'"./echo-orbit.css"','"./echo-orbit.css","./echo-orbit.css?v=1.5.1"','versioned echo css asset');
+sw=replace(sw,'"./echo-orbit.js"','"./echo-orbit.js","./echo-orbit.js?v=1.5.1"','versioned echo js asset');
 write('sw.js',sw);
 
 const pkg=JSON.parse(read('package.json'));pkg.version='1.5.1';write('package.json',JSON.stringify(pkg,null,2)+'\n');
