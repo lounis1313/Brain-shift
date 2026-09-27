@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#07152d" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Brain Shift" />
+  <meta name="description" content="Brain Shift — 5 minutes pour réveiller ton cerveau." />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="assets/icon-192.png" />
+  <link rel="apple-touch-icon" href="assets/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Brain Shift — NOVELYX Studio</title>
+</head>
+<body>
+  <svg class="svg-sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 5v10M8 9l4-4 4 4M5 13v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M8 11l4 4 4-4M5 19h14"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.9 4.9 7 7M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5V20h-6v-5H9v5H3z"/></symbol>
+    <symbol id="i-stats" viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></symbol>
+    <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="9" r="5"/><path d="m9 13-2 8 5-3 5 3-2-8"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4.2 3.5-6 8-6s7.2 1.8 8 6"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></symbol>
+    <symbol id="i-brain" viewBox="0 0 24 24"><path d="M9.5 4.5A3.5 3.5 0 0 0 6 8v.3A3.5 3.5 0 0 0 5.5 15 3.5 3.5 0 0 0 9 19h1V5.5a2 2 0 0 0-.5-1ZM14.5 4.5A3.5 3.5 0 0 1 18 8v.3a3.5 3.5 0 0 1 .5 6.7A3.5 3.5 0 0 1 15 19h-1V5.5a2 2 0 0 1 .5-1Z"/><path d="M7 10h3M14 10h3M8 15h2M14 15h2"/></symbol>
+    <symbol id="i-memory" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></symbol>
+    <symbol id="i-math" viewBox="0 0 24 24"><path d="M5 7h6M8 4v6M14 7h5M14 16h5M5 16h6M5 19l6-6"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5"/></symbol>
+    <symbol id="i-sequence" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="7" r="2"/><circle cx="19" cy="12" r="2"/><path d="m7 11 3-3M14 8l3 3"/></symbol>
+    <symbol id="i-color" viewBox="0 0 24 24"><circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="m13 2-7 11h5l-1 9 8-13h-5z"/></symbol>
+    <symbol id="i-dice" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8" cy="8" r="1"/><circle cx="16" cy="8" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="8" cy="16" r="1"/><circle cx="16" cy="16" r="1"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2c.7 5 2 7 7 7-5 .7-6.3 2-7 7-.7-5-2-6.3-7-7 5-.7 6.3-2 7-7ZM19 15c.3 2.2.8 2.7 3 3-2.2.3-2.7.8-3 3-.3-2.2-.8-2.7-3-3 2.2-.3 2.7-.8 3-3Z"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24"><path d="M4 10h16v10H4zM3 7h18v3H3zM12 7v13"/><path d="M12 7c-1-4-6-4-6-1 0 1.5 2 1 6 1ZM12 7c1-4 6-4 6-1 0 1.5-2 1-6 1Z"/></symbol>
+  </svg>
+
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <div id="app">
+    <header class="topbar shell">
+      <button class="brand-lockup" id="homeBrand" aria-label="Accueil Brain Shift">
+        <img src="assets/icon-192.png" alt="" class="brand-mark" />
+        <span class="brand-copy"><strong>Brain Shift</strong><small>by NOVELYX Studio</small></span>
+      </button>
+      <div class="top-actions">
+        <button class="icon-button ghost" id="shareBtn" aria-label="Partager Brain Shift" title="Partager"><svg class="ui-icon"><use href="#i-share"/></svg></button>
+        <button class="icon-button ghost" id="installBtn" aria-label="Installer l'application" title="Installer" hidden><svg class="ui-icon"><use href="#i-download"/></svg></button>
+        <button class="icon-button ghost" id="settingsBtn" aria-label="Réglages"><svg class="ui-icon"><use href="#i-settings"/></svg></button>
+      </div>
+    </header>
+
+    <main class="shell page-space">
+      <section id="homeView" class="view active">
+        <div class="hero-grid">
+          <article class="hero-card glass">
+            <div class="hero-copy">
+              <span class="eyebrow"><span class="dot"></span> ENTRAÎNEMENT DU JOUR</span>
+              <h1>5 minutes pour<br><span>réveiller ton cerveau.</span></h1>
+              <p>Des défis courts et élégants pour travailler mémoire, logique, calcul, observation et rapidité.</p>
+              <div class="hero-actions">
+                <button class="button primary" id="quickStartBtn"><svg class="button-icon"><use href="#i-bolt"/></svg>Défi rapide</button>
+                <button class="button secondary" id="randomBtn"><svg class="button-icon"><use href="#i-dice"/></svg>Partie surprise</button>
+              </div>
+            </div>
+            <div class="hero-orb">
+              <img src="assets/icon-512.png" alt="Logo Brain Shift" />
+            </div>
+          </article>
+
+          <aside class="profile-card glass">
+            <div class="profile-top">
+              <div class="avatar-ring"><div class="avatar-core"><svg class="ui-icon avatar-icon"><use href="#i-brain"/></svg></div></div>
+              <div>
+                <span class="subtle">NIVEAU</span>
+                <div class="level-line"><strong id="levelValue">1</strong><span id="rankName">Curieux</span></div>
+              </div>
+              <span class="crown"><svg class="ui-icon"><use href="#i-spark"/></svg></span>
+            </div>
+            <div class="xp-row"><span id="xpLabel">0 / 500 XP</span><span id="streakLabel">🔥 1 jour</span></div>
+            <div class="meter"><i id="xpMeter"></i></div>
+            <div class="difficulty-home"><span>DIFFICULTÉ</span><strong id="difficultyHome">Auto · Facile</strong></div>
+            <div class="mini-stats">
+              <div><strong id="brainScoreValue">—</strong><span>Score cerveau</span></div>
+              <div><strong id="accuracyValue">—</strong><span>Précision</span></div>
+              <div><strong id="gamesValue">0</strong><span>Parties</span></div>
+            </div>
+          </aside>
+        </div>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div><span class="eyebrow">ENTRAÎNEMENTS</span><h2>Choisis ton défi</h2></div>
+            <span class="section-note">2 à 10 min</span>
+          </div>
+
+          <div class="game-grid">
+            <button class="game-card memory" data-mode="memory">
+              <span class="game-icon"><svg class="ui-icon"><use href="#i-memory"/></svg></span><span class="game-copy"><strong>Mémoire Flash</strong><small>Retiens et retrouve</small></span>
+              <span class="game-meta"><span class="mode-diff" id="diff-memory">Auto</span><span class="record-mini"><b id="best-memory">0</b><small>record</small></span></span>
+            </button>
+            <button class="game-card math" data-mode="math">
+              <span class="game-icon"><svg class="ui-icon"><use href="#i-math"/></svg></span><span class="game-copy"><strong>Calcul Express</strong><small>Vite et juste</small></span>
+              <span class="game-meta"><span class="mode-diff" id="diff-math">Auto</span><span class="record-mini"><b id="best-math">0</b><small>record</small></span></span>
+            </button>
+            <button class="game-card odd" data-mode="odd">
+              <span class="game-icon"><svg class="ui-icon"><use href="#i-eye"/></svg></span><span class="game-copy"><strong>Intrus Visuel</strong><small>Repère la différence</small></span>
+              <span class="game-meta"><span class="mode-diff" id="diff-odd">Auto</span><span class="record-mini"><b id="best-odd">0</b><small>record</small></span></span>
+            </button>
+            <button class="game-card sequence" data-mode="sequence">
+              <span class="game-icon"><svg class="ui-icon"><use href="#i-sequence"/></svg></span><span class="game-copy"><strong>Suite Logique</strong><small>Trouve la prochaine</small></span>
+              <span class="game-meta"><span class="mode-diff" id="diff-sequence">Auto</span><span class="record-mini"><b id="best-sequence">0</b><small>record</small></span></span>
+            </button>
+            <button class="game-card stroop" data-mode="stroop">
+              <span class="game-icon"><svg class="ui-icon"><use href="#i-color"/></svg></span><span class="game-copy"><strong>Stroop Couleurs</strong><small>Dis la bonne couleur</small></span>
+              <span class="game-meta"><span class="mode-diff" id="diff-stroop">Auto</span><span class="record-mini"><b id="best-stroop">0</b><small>record</small></span></span>
+            </button>
+          </div>
+        </section>
+
+        <section class="dashboard-grid">
+          <article class="goal-card glass">
+            <div class="card-head"><div><span class="eyebrow">OBJECTIF DU JOUR</span><h3>3 entraînements</h3></div><div class="goal-count" id="dailyCount">0 / 3</div></div>
+            <p>Complète l’objectif quotidien pour obtenir <strong>+100 XP</strong>.</p>
+            <div class="meter warm"><i id="dailyMeter"></i></div>
+            <div class="goal-footer"><span id="goalMessage">Encore 3 défis.</span><span><svg class="ui-icon small-icon"><use href="#i-gift"/></svg></span></div>
+          </article>
+
+          <article class="badge-card glass">
+            <div class="card-head"><div><span class="eyebrow">BADGES</span><h3>Ta collection</h3></div><span id="badgeCount">0 / 5</span></div>
+            <div class="badge-row">
+              <span class="badge locked" data-badge="first" title="Premier pas">⚡</span>
+              <span class="badge locked" data-badge="combo" title="Série x5">✦</span>
+              <span class="badge locked" data-badge="eye" title="Œil de lynx">◉</span>
+              <span class="badge locked" data-badge="calc" title="Calculateur">＋</span>
+              <span class="badge locked" data-badge="memory" title="Mémoire d'acier">🧠</span>
+            </div>
+          </article>
+        </section>
+
+        <section class="quote-strip glass">
+          <div class="quote-lead"><svg class="ui-icon quote-icon"><use href="#i-spark"/></svg><strong>Petit défi, grand progrès.</strong></div>
+          <span class="subtle">Mémoire · Concentration · Logique · Réflexes</span>
+        </section>
+      </section>
+
+      <section id="statsView" class="view">
+        <div class="section-heading page-title">
+          <div><span class="eyebrow">PROGRESSION</span><h2>Statistiques</h2></div>
+        </div>
+        <div class="stats-grid">
+          <article class="metric glass"><span>Score cerveau</span><strong id="statsBrain">—</strong><small>meilleur score du jour</small></article>
+          <article class="metric glass"><span>Précision</span><strong id="statsAccuracy">—</strong><small>sur toutes les réponses</small></article>
+          <article class="metric glass"><span>Parties</span><strong id="statsGames">0</strong><small>entraînements terminés</small></article>
+          <article class="metric glass"><span>XP total</span><strong id="statsXp">0</strong><small>progression cumulée</small></article>
+        </div>
+        <article class="glass modes-stats">
+          <div class="card-head"><div><span class="eyebrow">RECORDS</span><h3>Meilleurs scores</h3></div></div>
+          <div id="recordsList"></div>
+        </article>
+      </section>
+
+      <section id="badgesView" class="view">
+        <div class="section-heading page-title">
+          <div><span class="eyebrow">RÉCOMPENSES</span><h2>Badges</h2></div>
+        </div>
+        <div id="badgeGallery" class="badge-gallery"></div>
+      </section>
+
+
+      <section id="profileView" class="view">
+        <div class="section-heading page-title"><div><span class="eyebrow">TON ESPACE</span><h2>Profil local</h2></div></div>
+        <article class="profile-page-card glass">
+          <div class="profile-page-head">
+            <div class="avatar-ring profile-avatar"><div class="avatar-core"><svg class="ui-icon avatar-icon"><use href="#i-brain"/></svg></div></div>
+            <div><span class="subtle">BRAIN SHIFTER</span><h3 id="profileRank">Curieux · Niveau 1</h3><p>Ta progression reste privée sur cet appareil.</p></div>
+          </div>
+          <div class="profile-kpis">
+            <div><strong id="profileXp">0</strong><span>XP</span></div>
+            <div><strong id="profileStreak">1</strong><span>série</span></div>
+            <div><strong id="profileGames">0</strong><span>parties</span></div>
+            <div><strong id="profileBrain">—</strong><span>cerveau</span></div>
+          </div>
+          <div class="profile-info-row"><span>Difficulté</span><strong id="profileDifficulty">Auto · Facile</strong></div>
+          <div class="profile-info-row"><span>Badges débloqués</span><strong id="profileBadges">0 / 10</strong></div>
+          <div class="hero-actions"><button class="button primary" id="profileSettingsBtn"><svg class="button-icon"><use href="#i-settings"/></svg>Réglages</button><button class="button secondary" id="profileShareBtn"><svg class="button-icon"><use href="#i-share"/></svg>Partager</button></div>
+        </article>
+        <article class="about-card glass"><span class="eyebrow">À PROPOS</span><h3>Brain Shift</h3><p>Entraînement ludique de mémoire, logique, calcul, observation et contrôle attentionnel. Les scores sont destinés au jeu et à la progression personnelle, pas à une mesure clinique de l’intelligence.</p><p class="privacy-note"><strong>Confidentialité :</strong> aucune progression n’est envoyée à un serveur dans cette version. Les données restent sur ton appareil sauf export manuel.</p><div class="studio-sign">NOVELYX Studio · Version 1.1</div></article>
+      </section>
+
+      <section id="gameView" class="view">
+        <div class="game-shell">
+          <div class="game-topline">
+            <div class="game-actions-left"><button class="icon-button ghost" id="leaveGameBtn" aria-label="Quitter la partie"><svg class="ui-icon"><use href="#i-back"/></svg></button><button class="icon-button ghost" id="pauseGameBtn" aria-label="Mettre en pause"><svg class="ui-icon"><use href="#i-pause"/></svg></button></div>
+            <div class="game-heading">
+              <span class="eyebrow" id="roundLabel">MANCHE 1</span>
+              <h2 id="gameTitle">Mémoire Flash</h2>
+              <span class="difficulty-chip" id="gameDifficulty">Normal · 2/5</span>
+            </div>
+            <div class="score-pill"><span>Score</span><strong id="scoreValue">0</strong></div>
+          </div>
+          <div class="timer-track"><i id="timerMeter"></i></div>
+          <article class="play-stage glass" id="playStage"></article>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Navigation principale">
+      <button class="nav-item active" data-view="homeView"><svg class="ui-icon"><use href="#i-home"/></svg><small>Accueil</small></button>
+      <button class="nav-item" data-view="statsView"><svg class="ui-icon"><use href="#i-stats"/></svg><small>Stats</small></button>
+      <button class="nav-item" data-view="badgesView"><svg class="ui-icon"><use href="#i-award"/></svg><small>Badges</small></button>
+      <button class="nav-item" data-view="profileView"><svg class="ui-icon"><use href="#i-user"/></svg><small>Profil</small></button>
+    </nav>
+  </div>
+
+  <div id="modal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal glass" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" tabindex="-1">
+      <div class="modal-head"><div><span class="eyebrow">BRAIN SHIFT</span><h3 id="settingsTitle">Réglages</h3></div><button class="icon-button ghost" id="closeModal" aria-label="Fermer les réglages">×</button></div>
+      <div class="setting-row"><div><strong>Effets sonores</strong><small>Désactivés par défaut</small></div><button class="switch" id="soundSwitch" role="switch" aria-checked="false" aria-label="Effets sonores"><i></i></button></div>
+      <div class="setting-row"><div><strong>Animations</strong><small>Transitions et retours visuels</small></div><button class="switch on" id="animSwitch" role="switch" aria-checked="true" aria-label="Animations"><i></i></button></div>
+      <div class="setting-row"><div><strong>Vibrations</strong><small>Retour haptique sur téléphone compatible</small></div><button class="switch on" id="hapticSwitch" role="switch" aria-checked="true" aria-label="Vibrations"><i></i></button></div>
+      <div class="setting-row difficulty-setting">
+        <div><strong>Difficulté</strong><small>Auto s’adapte à ton niveau et à tes performances</small></div>
+        <select id="difficultySelect" class="difficulty-select" aria-label="Difficulté">
+          <option value="auto">Auto</option>
+          <option value="1">Facile</option>
+          <option value="2">Normal</option>
+          <option value="3">Difficile</option>
+          <option value="4">Expert</option>
+          <option value="5">Maître</option>
+        </select>
+      </div>
+      <div class="setting-row backup-setting"><div><strong>Sauvegarde</strong><small>Exporter ou restaurer ta progression</small></div><div class="backup-actions"><button class="mini-button" id="exportBtn">Exporter</button><button class="mini-button" id="importBtn">Importer</button><input type="file" id="importFile" accept="application/json,.json" hidden></div></div>
+      <div class="setting-row"><div><strong>Données</strong><small>Sauvegardées uniquement sur cet appareil</small></div><button class="danger-button" id="resetBtn">Réinitialiser</button></div>
+      <div class="studio-sign">NOVELYX Studio · Brain Shift <span class="app-version">1.1</span></div>
+    </div>
+  </div>
+
+
+  <div id="pauseOverlay" class="pause-overlay" aria-hidden="true">
+    <div class="pause-card glass" role="dialog" aria-modal="true" aria-labelledby="pauseTitle" tabindex="-1"><div class="result-icon">⏸</div><span class="eyebrow">PARTIE EN PAUSE</span><h2 id="pauseTitle">Reprends quand tu veux.</h2><p>Le chrono est arrêté.</p><div class="hero-actions"><button class="button primary" id="resumeBtn">Reprendre</button><button class="button secondary" id="pauseHomeBtn">Accueil</button></div></div>
+  </div>
+
+  <div id="onboarding" class="modal-backdrop onboarding" aria-hidden="true">
+    <div class="modal glass onboarding-card" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle" tabindex="-1">
+      <div class="onboarding-logo"><img src="assets/icon-192.png" alt="Symbole Brain Shift" /></div>
+      <span class="eyebrow">BIENVENUE DANS BRAIN SHIFT</span><h3 id="onboardingTitle">5 minutes. Un cerveau plus vif.</h3>
+      <div class="onboarding-points"><div><b>01</b><span><strong>Choisis un entraînement</strong><small>5 disciplines pour varier les efforts.</small></span></div><div><b>02</b><span><strong>Laisse Auto te challenger</strong><small>La difficulté évolue avec ta progression.</small></span></div><div><b>03</b><span><strong>Gagne XP et badges</strong><small>Records, série quotidienne et Score cerveau.</small></span></div></div>
+      <button class="button primary onboarding-start" id="onboardingStart">Commencer</button>
+    </div>
+  </div>
+
+
+  <div id="modeTutorial" class="modal-backdrop tutorial" aria-hidden="true">
+    <div class="modal glass tutorial-card" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle" tabindex="-1">
+      <div class="tutorial-icon" id="tutorialIcon"></div>
+      <span class="eyebrow">COMMENT JOUER</span>
+      <h3 id="tutorialTitle">Mode</h3>
+      <p id="tutorialText"></p>
+      <div class="tutorial-meta"><span id="tutorialRounds"></span><span id="tutorialDifficulty"></span></div>
+      <div class="hero-actions"><button class="button primary" id="tutorialStart">Jouer</button><button class="button secondary" id="tutorialCancel">Retour</button></div>
+    </div>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
