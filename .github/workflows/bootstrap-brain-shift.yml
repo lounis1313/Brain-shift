@@ -1,0 +1,43 @@
+name: Bootstrap Brain Shift PWA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/bootstrap-brain-shift.yml'
+      - 'brain-shift-pages-deploy-optimized.zip'
+
+permissions:
+  contents: write
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract clean PWA package
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .brainshift_tmp
+          mkdir .brainshift_tmp
+          unzip -o brain-shift-pages-deploy-optimized.zip -d .brainshift_tmp
+          rm -rf assets payload
+          cp -a .brainshift_tmp/. .
+          rm -rf .brainshift_tmp
+          rm -f brain-shift-pages-deploy-optimized.zip icon-192.png icon-512.png maskable-512.png
+
+      - name: Commit cleaned deployment
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'No changes to commit'
+          else
+            git commit -m 'Deploy Brain Shift 1.1 PWA'
+            git push
+          fi
