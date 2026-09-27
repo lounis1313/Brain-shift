@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const PRO_VERSION = '1.2.0';
+  const PRO_VERSION = '1.2.1';
   const modeOrder = ['memory','math','odd','sequence','stroop'];
   const modeLabels = {memory:'Mémoire', math:'Calcul', odd:'Observation', sequence:'Logique', stroop:'Attention'};
   const modeIcons = {memory:'🧠', math:'∑', odd:'◉', sequence:'◇', stroop:'◎'};
@@ -10,8 +10,70 @@
   if (!Array.isArray(data.history)) data.history = [];
   if (!data.pro) data.pro = {version:PRO_VERSION, firstSeenAt:new Date().toISOString()};
   data.pro.version = PRO_VERSION;
+  if (!data.pro.soundDesignVersion){ data.sound=true; data.pro.soundDesignVersion='1'; }
 
   const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
+
+
+  // --- Brain Shift sound identity -------------------------------------------------
+  // Generated with Web Audio: lightweight, offline and license-free.
+  const audioState={ctx:null,lastTapAt:0};
+  function ensureAudio(){
+    if(!data.sound)return null;
+    const Ctx=window.AudioContext||window.webkitAudioContext;
+    if(!Ctx)return null;
+    try{
+      if(!audioState.ctx)audioState.ctx=new Ctx();
+      if(audioState.ctx.state==='suspended')audioState.ctx.resume().catch(()=>{});
+      return audioState.ctx;
+    }catch{return null}
+  }
+  function tone(freq,duration=.07,{delay=0,type='sine',gain=.022,to=null}={}){
+    const ctx=ensureAudio();if(!ctx)return;
+    const start=ctx.currentTime+delay,end=start+duration;
+    const osc=ctx.createOscillator(),amp=ctx.createGain();
+    osc.type=type;osc.frequency.setValueAtTime(Math.max(40,freq),start);
+    if(to)osc.frequency.exponentialRampToValueAtTime(Math.max(40,to),end);
+    amp.gain.setValueAtTime(.0001,start);amp.gain.exponentialRampToValueAtTime(Math.max(.0002,gain),start+.012);amp.gain.exponentialRampToValueAtTime(.0001,end);
+    osc.connect(amp);amp.connect(ctx.destination);osc.start(start);osc.stop(end+.025);
+  }
+  function soundFx(name){
+    if(!data.sound)return;
+    const n=Date.now();
+    if(name==='tap'&&n-audioState.lastTapAt<45)return;
+    if(name==='tap')audioState.lastTapAt=n;
+    const seq=(notes)=>notes.forEach(([f,d,delay,type='sine',gain=.02,to=null])=>tone(f,d,{delay,type,gain,to}));
+    if(name==='tap') return seq([[360,.045,0,'sine',.008,430]]);
+    if(name==='start') return seq([[392,.07,0,'sine',.014,466],[523,.09,.065,'sine',.017,587]]);
+    if(name==='correct') return seq([[620,.065,0,'sine',.018,700],[860,.095,.055,'sine',.022,940]]);
+    if(name==='combo') return seq([[660,.055,0,'sine',.018],[880,.065,.045,'sine',.021],[1100,.11,.095,'sine',.023,1240]]);
+    if(name==='wrong') return seq([[205,.095,0,'triangle',.016,155]]);
+    if(name==='finish') return seq([[440,.07,0,'sine',.014],[554,.075,.06,'sine',.016],[659,.12,.12,'sine',.018]]);
+    if(name==='reward') return seq([[523,.07,0,'sine',.017],[659,.08,.055,'sine',.019],[784,.13,.115,'sine',.022]]);
+    if(name==='badge') return seq([[784,.055,0,'sine',.016],[988,.065,.045,'sine',.019],[1175,.14,.105,'sine',.022]]);
+    if(name==='record') return seq([[523,.06,0,'sine',.016],[659,.065,.05,'sine',.018],[784,.075,.1,'sine',.02],[1047,.15,.16,'sine',.024]]);
+    if(name==='level') return seq([[440,.055,0,'sine',.015],[554,.06,.045,'sine',.017],[659,.07,.09,'sine',.019],[880,.16,.15,'sine',.024]]);
+    if(name==='coach') return seq([[392,.055,0,'sine',.014],[523,.06,.045,'sine',.016],[659,.07,.09,'sine',.018],[784,.14,.145,'sine',.021]]);
+  }
+
+  document.addEventListener('pointerdown',()=>ensureAudio(),{passive:true});
+
+  feedback=function(ok){soundFx(ok?(current.combo>=5?'combo':'correct'):'wrong');haptic(ok?12:35)};
+
+  const coreToggleSetting=toggleSetting;
+  toggleSetting=function(key){
+    coreToggleSetting(key);
+    if(key==='sound'&&data.sound){ensureAudio();soundFx('reward')}
+  };
+
+  const coreStartGame=startGame;
+  startGame=function(...args){soundFx('start');return coreStartGame(...args)};
+
+  document.addEventListener('click',e=>{
+    const el=e.target.closest?.('button,.game-card,.nav-item,.icon-button,.mini-button,.switch,select');
+    if(!el||el.disabled||el.matches('.answer,.odd-cell,.tile'))return;
+    soundFx('tap');
+  });
 
   function skillSnapshot(mode){
     const st=data.modeStats?.[mode]||{};
@@ -100,8 +162,13 @@
   finishGame=function(){
     if(current.quick)return coreFinishGame();
     const snapshot={mode:current.mode,score:current.score,acc:current.total?Math.round(current.correct/current.total*100):0,speed:speedScore(),difficulty:effectiveDifficulty(current.mode)};
-    const wasCoach=coachState.active;
+    const wasCoach=coachState.active,beforeLevel=level(),beforeBadges=data.badges.length,beforeBest=data.best[current.mode]||0,beforeDailyReward=!!data.dailyReward;
     coreFinishGame();
+    if(level()>beforeLevel)soundFx('level');
+    else if(data.badges.length>beforeBadges)soundFx('badge');
+    else if((data.best[current.mode]||0)>beforeBest)soundFx('record');
+    else if(!beforeDailyReward&&data.dailyReward)soundFx('reward');
+    else setTimeout(()=>soundFx('finish'),120);
     pushHistory({type:wasCoach?'coach-leg':'game',...snapshot});
     refreshProUI();
     if(!wasCoach)return;
@@ -116,7 +183,7 @@
   };
 
   function renderCoachSummary(){
-    coachState.active=false;
+    coachState.active=false;setTimeout(()=>soundFx('coach'),120);
     const avgAcc=Math.round(coachState.results.reduce((s,x)=>s+x.acc,0)/coachState.results.length);
     const avgSpeed=Math.round(coachState.results.reduce((s,x)=>s+x.speed,0)/coachState.results.length);
     const avgScore=Math.round(coachState.results.reduce((s,x)=>s+x.score,0)/coachState.results.length);
@@ -132,7 +199,9 @@
     const avgAcc=current.quickScores.length?current.quickScores.reduce((a,b)=>a+b.acc,0)/current.quickScores.length:0;
     const avgSpeed=current.quickScores.length?current.quickScores.reduce((a,b)=>a+b.speed,0)/current.quickScores.length:0;
     const brain=Math.min(100,Math.round(avgAcc*.75+avgSpeed*.25));
+    const beforeLevel=level(),beforeBadges=data.badges.length;
     coreCompleteQuickChallenge();
+    if(level()>beforeLevel)soundFx('level');else if(data.badges.length>beforeBadges)soundFx('badge');else soundFx('reward');
     pushHistory({type:'quick',mode:'quick',score:brain,acc:Math.round(avgAcc),speed:Math.round(avgSpeed),difficulty:0});
     refreshProUI();
   };

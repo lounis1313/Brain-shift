@@ -1,4 +1,4 @@
-const CACHE="brain-shift-v1.2.0";
+const CACHE="brain-shift-v1.2.1";
 const ASSETS=["./","./index.html","./styles.css","./pro.css","./app.js","./pro.js","./manifest.webmanifest","./assets/icon-192.png","./assets/icon-512.png","./assets/maskable-512.png"];
 
 self.addEventListener("install",event=>{

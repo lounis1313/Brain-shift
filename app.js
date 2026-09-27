@@ -6,7 +6,7 @@ const MODES = {
   stroop:{title:"Stroop Couleurs", rounds:12}
 };
 const modeNames={memory:"Mémoire Flash",math:"Calcul Express",odd:"Intrus Visuel",sequence:"Suite Logique",stroop:"Stroop Couleurs"};
-const APP_VERSION="1.2.0";
+const APP_VERSION="1.2.1";
 const MODE_HELP={
  memory:"Mémorise les cases illuminées puis retouche exactement les mêmes. La grille, le nombre de cases et le temps d’exposition évoluent avec ton niveau.",
  math:"Résous l’opération avant la fin du chrono. Plus tu réponds vite et juste, plus ton combo et ton score montent.",
@@ -29,7 +29,7 @@ const BADGES={
 const emptyModeStats=()=>Object.fromEntries(Object.keys(MODES).map(k=>[k,{plays:0,quickLegs:0,correct:0,total:0,totalScore:0,quickScore:0,bestCombo:0,bestSpeed:0}]));
 const emptyRecent=()=>Object.fromEntries(Object.keys(MODES).map(k=>[k,[]]));
 const defaultData={schema:5,xp:0,streak:0,lastPlayedDay:null,dailyDate:null,daily:0,dailyReward:false,games:0,correct:0,total:0,bestBrain:0,bestBrainToday:0,bestBrainDate:null,
- best:{memory:0,math:0,odd:0,sequence:0,stroop:0},modeStats:emptyModeStats(),recent:emptyRecent(),tutorials:{},badges:[],sound:false,haptics:true,anim:true,difficulty:"auto",onboardingSeen:false};
+ best:{memory:0,math:0,odd:0,sequence:0,stroop:0},modeStats:emptyModeStats(),recent:emptyRecent(),tutorials:{},badges:[],sound:true,haptics:true,anim:true,difficulty:"auto",onboardingSeen:false};
 let data=loadData(), installPrompt=null;
 let current={mode:null,round:0,score:0,correct:0,total:0,combo:0,maxCombo:0,quick:false,quickIndex:0,quickScores:[],timer:null,timerEndsAt:0,timerCallback:null,timerRemaining:0,roundLimitMs:0,roundStartedAt:0,speedSum:0,speedSamples:0,startTs:0,locked:false,paused:false,pendingTimeouts:[],sessionId:0};
 const $=id=>document.getElementById(id);

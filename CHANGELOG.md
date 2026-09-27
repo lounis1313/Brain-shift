@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.1 — Interactive sound polish
+
+- Added a custom Brain Shift sound identity generated with Web Audio.
+- Added soft UI selection sounds, start cues, correct/error feedback and combo feedback.
+- Added distinct reward cues for badges, records, level-ups, quick challenges and Coach NOVELYX completion.
+- Sound is enabled for the new audio-design migration and remains fully optional from Settings.
+- No external audio assets: offline, lightweight and license-free.
+
 ## 1.2.0 — Professional polish
 
 - Added **Coach NOVELYX**, a personalized 3-game guided workout.
