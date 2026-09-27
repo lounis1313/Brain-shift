@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.1 — PWA refresh reliability
+
+- Added proactive service-worker update checks on each launch.
+- Added cache-busted Echo Orbit asset URLs so older installed PWAs cannot keep hiding the new game behind stale static caches.
+- Bumped the offline cache generation to 1.5.1.
+
 ## 1.5.0 — Echo Orbit
 
 - Added **Echo Orbit**, a premium spatial working-memory game built around moving satellites and audiovisual sequences.

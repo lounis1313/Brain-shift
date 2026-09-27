@@ -24,7 +24,7 @@ assert.match(index, /reactor\.css/, 'Shift Reactor CSS is not loaded');
 assert.match(index, /reactor\.js/, 'Shift Reactor JS is not loaded');
 assert.match(index, /echo-orbit\.css/, 'Echo Orbit CSS is not loaded');
 assert.match(index, /echo-orbit\.js/, 'Echo Orbit JS is not loaded');
-assert.match(app, /APP_VERSION="1\.5\.0"/, 'App version mismatch');
+assert.match(app, /APP_VERSION="1\.5\.1"/, 'App version mismatch');
 assert.equal(manifest.start_url, './', 'PWA start_url must stay relative for GitHub Pages');
 assert.equal(manifest.scope, './', 'PWA scope must stay relative for GitHub Pages');
 assert.ok(manifest.icons?.some(x=>x.sizes==='192x192'), '192px icon missing');

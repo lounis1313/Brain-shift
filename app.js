@@ -6,7 +6,7 @@ const MODES = {
   stroop:{title:"Stroop Couleurs", rounds:12}
 };
 const modeNames={memory:"Mémoire Flash",math:"Calcul Express",odd:"Intrus Visuel",sequence:"Suite Logique",stroop:"Stroop Couleurs"};
-const APP_VERSION="1.5.0";
+const APP_VERSION="1.5.1";
 const MODE_HELP={
  memory:"Mémorise les cases illuminées puis retouche exactement les mêmes. La grille, le nombre de cases et le temps d’exposition évoluent avec ton niveau.",
  math:"Résous l’opération avant la fin du chrono. Plus tu réponds vite et juste, plus ton combo et ton score montent.",
@@ -372,5 +372,5 @@ function isStandalone(){return window.matchMedia?.("(display-mode: standalone)")
 function refreshInstallButton(){const b=$("installBtn");b.hidden=isStandalone()||!installPrompt}
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();installPrompt=e;refreshInstallButton()});window.addEventListener("appinstalled",()=>{installPrompt=null;refreshInstallButton();showToast("Brain Shift est installé.")});
 $("installBtn").onclick=async()=>{if(!installPrompt)return;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;refreshInstallButton()};refreshInstallButton();
-if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))}
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").then(reg=>reg.update().catch(()=>{})).catch(()=>{}))}
 document.querySelectorAll(".app-version").forEach(x=>x.textContent=APP_VERSION.replace(/\.0$/,""));normalizeDay();updateHome();showOnboarding();
