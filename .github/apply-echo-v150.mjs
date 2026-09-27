@@ -25,7 +25,7 @@ write('pro.js',pro);
 
 let sw=read('sw.js');
 sw=replace(sw,'const CACHE="brain-shift-v1.4.0";','const CACHE="brain-shift-v1.5.0";','cache version');
-sw=replace(sw,'"./reactor.css","./reactor.js",','"./reactor.css","./reactor.js","./echo-orbit.css","./echo-orbit.js",','offline echo assets');
+sw=replace(sw,'"./reactor.css","./app.js","./pro.js","./reactor.js",','"./reactor.css","./echo-orbit.css","./app.js","./pro.js","./reactor.js","./echo-orbit.js",','offline echo assets');
 write('sw.js',sw);
 
 const pkg=JSON.parse(read('package.json'));pkg.version='1.5.0';write('package.json',JSON.stringify(pkg,null,2)+'\n');
