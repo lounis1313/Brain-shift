@@ -1,5 +1,5 @@
-const CACHE="brain-shift-v2.0.0";
-const ASSETS=["./quantum-trace.css?v=2.0.0","./quantum-trace.js?v=2.0.0","./","./index.html","./styles.css","./pro.css","./reactor.css","./echo-orbit.css","./echo-orbit.css?v=1.7.0","./app.js","./pro.js","./reactor.js","./echo-orbit.js","./echo-orbit.js?v=1.7.0","./manifest.webmanifest","./assets/icon-192.png","./assets/icon-512.png","./assets/maskable-512.png","./assets/audio/tap.mp3","./assets/audio/correct.mp3","./assets/audio/wrong.mp3","./assets/audio/combo.mp3","./assets/audio/reward.mp3","./assets/audio/badge.mp3","./assets/audio/record.mp3","./assets/audio/level.mp3","./assets/audio/start.mp3","./assets/audio/finish.mp3"];
+const CACHE="brain-shift-v2.0.1";
+const ASSETS=["./","./index.html","./styles.css","./pro.css","./reactor.css","./echo-orbit.css","./echo-orbit.css?v=1.7.0","./app.js","./pro.js","./reactor.js","./echo-orbit.js","./echo-orbit.js?v=1.7.0","./manifest.webmanifest","./assets/icon-192.png","./assets/icon-512.png","./assets/maskable-512.png","./assets/audio/tap.mp3","./assets/audio/correct.mp3","./assets/audio/wrong.mp3","./assets/audio/combo.mp3","./assets/audio/reward.mp3","./assets/audio/badge.mp3","./assets/audio/record.mp3","./assets/audio/level.mp3","./assets/audio/start.mp3","./assets/audio/finish.mp3"];
 
 self.addEventListener("install",event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()));
