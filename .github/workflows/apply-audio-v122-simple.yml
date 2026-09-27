@@ -1,0 +1,30 @@
+name: Apply Brain Shift Audio V1.2.2 Simple
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/audio-v122-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Apply audio patch
+        run: python tools/apply_audio_v122.py
+      - name: Run quality checks
+        run: npm test
+      - name: Commit release
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm -f .github/workflows/apply-audio-v122-simple.yml tools/audio-v122-trigger.txt tools/apply_audio_v122.py
+          git add -A
+          git commit -m "Release Brain Shift 1.2.2 playful sound design"
+          git push
