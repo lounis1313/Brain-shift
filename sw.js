@@ -1,5 +1,5 @@
-const CACHE="brain-shift-v1.1.1";
-const ASSETS=["./","./index.html","./styles.css","./app.js","./manifest.webmanifest","./assets/icon-192.png","./assets/icon-512.png","./assets/maskable-512.png"];
+const CACHE="brain-shift-v1.2.0";
+const ASSETS=["./","./index.html","./styles.css","./pro.css","./app.js","./pro.js","./manifest.webmanifest","./assets/icon-192.png","./assets/icon-512.png","./assets/maskable-512.png"];
 
 self.addEventListener("install",event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()));
@@ -29,3 +29,5 @@ self.addEventListener("fetch",event=>{
     }))
   );
 });
+
+self.addEventListener("message",event=>{if(event.data?.type==="SKIP_WAITING")self.skipWaiting()});
