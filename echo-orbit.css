@@ -36,3 +36,11 @@
 .echo-satellite.pulse>span{filter:saturate(1.65) brightness(1.18);outline:3px solid var(--echo);outline-offset:4px}
 .echo-satellite.pulse::after{content:attr(data-pulse-order);position:absolute;left:50%;top:-15px;transform:translateX(-50%);z-index:12;min-width:25px;height:25px;padding:0 5px;border-radius:999px;display:grid;place-items:center;font-size:12px;font-weight:950;color:#061225;background:var(--echo);border:2px solid rgba(255,255,255,.9);box-shadow:0 0 20px var(--echo)}
 .echo-satellite.pulse .echo-node-id{background:#fff;color:#071226;box-shadow:0 0 18px #fff,0 0 30px var(--echo)}
+
+/* Echo Orbit 1.6 — sequence is presented by the planets themselves */
+.echo-satellite{opacity:1;transition:opacity .18s ease,filter .18s ease}
+.echo-satellite.echo-dim{opacity:.16;filter:saturate(.25) brightness(.55)}
+.echo-satellite.pulse{opacity:1!important;filter:none!important;z-index:30}
+.echo-satellite.pulse>span{transform:scale(1.32)!important;outline:4px solid #fff!important;outline-offset:6px!important;box-shadow:0 0 18px #fff,0 0 38px var(--echo),0 0 78px var(--echo),inset 0 0 22px rgba(255,255,255,.75)!important;animation:echoPlanetSignal .5s ease-in-out infinite alternate!important}
+.echo-satellite.pulse::before{content:"MÉMORISE";position:absolute;left:50%;bottom:-28px;transform:translateX(-50%);font-size:9px;font-weight:950;letter-spacing:.12em;color:#fff;text-shadow:0 0 10px var(--echo);white-space:nowrap}
+@keyframes echoPlanetSignal{from{transform:scale(1.16);filter:brightness(1.15)}to{transform:scale(1.4);filter:brightness(1.8)}}
