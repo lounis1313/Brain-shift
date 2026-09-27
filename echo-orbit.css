@@ -44,3 +44,13 @@
 .echo-satellite.pulse>span{transform:scale(1.32)!important;outline:4px solid #fff!important;outline-offset:6px!important;box-shadow:0 0 18px #fff,0 0 38px var(--echo),0 0 78px var(--echo),inset 0 0 22px rgba(255,255,255,.75)!important;animation:echoPlanetSignal .5s ease-in-out infinite alternate!important}
 .echo-satellite.pulse::before{content:"MÉMORISE";position:absolute;left:50%;bottom:-28px;transform:translateX(-50%);font-size:9px;font-weight:950;letter-spacing:.12em;color:#fff;text-shadow:0 0 10px var(--echo);white-space:nowrap}
 @keyframes echoPlanetSignal{from{transform:scale(1.16);filter:brightness(1.15)}to{transform:scale(1.4);filter:brightness(1.8)}}
+
+/* Echo Orbit 1.7 — premium, number-free planets */
+.echo-node-id{display:none!important}
+.echo-node-mark{width:13px;height:13px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 18%,color-mix(in srgb,var(--echo) 70%,white) 22% 48%,var(--echo) 52% 100%);box-shadow:0 0 12px var(--echo);opacity:.92}
+.echo-satellite.pulse::after{content:""!important;position:absolute;left:50%;top:50%;width:calc(var(--size) + 22px);height:calc(var(--size) + 22px);transform:translate(-50%,-50%);border-radius:50%;border:2px solid var(--echo);background:transparent;box-shadow:0 0 22px var(--echo);pointer-events:none}
+.echo-satellite.pulse::before{content:""!important}
+.echo-difficulty{display:flex;align-items:center;gap:7px;flex:none;padding:5px 7px 5px 10px;border-radius:999px;border:1px solid rgba(163,143,255,.27);background:rgba(114,89,210,.12)}
+.echo-difficulty span{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:#9fb0d0;font-weight:800}
+.echo-difficulty select{appearance:none;border:0;outline:0;background:transparent;color:#eef3ff;font-size:11px;font-weight:850;padding:3px 18px 3px 2px;background-image:linear-gradient(45deg,transparent 50%,#a9b9dc 50%),linear-gradient(135deg,#a9b9dc 50%,transparent 50%);background-position:calc(100% - 8px) 50%,calc(100% - 4px) 50%;background-size:4px 4px,4px 4px;background-repeat:no-repeat}
+.echo-difficulty select option{color:#10162c}
