@@ -1,5 +1,5 @@
-const CACHE="brain-shift-v1.4.0";
-const ASSETS=["./","./index.html","./styles.css","./pro.css","./reactor.css","./app.js","./pro.js","./reactor.js","./manifest.webmanifest","./assets/icon-192.png","./assets/icon-512.png","./assets/maskable-512.png","./assets/audio/tap.mp3","./assets/audio/correct.mp3","./assets/audio/wrong.mp3","./assets/audio/combo.mp3","./assets/audio/reward.mp3","./assets/audio/badge.mp3","./assets/audio/record.mp3","./assets/audio/level.mp3","./assets/audio/start.mp3","./assets/audio/finish.mp3"];
+const CACHE="brain-shift-v1.5.0";
+const ASSETS=["./","./index.html","./styles.css","./pro.css","./reactor.css","./echo-orbit.css","./app.js","./pro.js","./reactor.js","./echo-orbit.js","./manifest.webmanifest","./assets/icon-192.png","./assets/icon-512.png","./assets/maskable-512.png","./assets/audio/tap.mp3","./assets/audio/correct.mp3","./assets/audio/wrong.mp3","./assets/audio/combo.mp3","./assets/audio/reward.mp3","./assets/audio/badge.mp3","./assets/audio/record.mp3","./assets/audio/level.mp3","./assets/audio/start.mp3","./assets/audio/finish.mp3"];
 
 self.addEventListener("install",event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()));

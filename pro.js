@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const PRO_VERSION = '1.4.0';
+  const PRO_VERSION = '1.5.0';
   const modeOrder = ['memory','math','odd','sequence','stroop'];
   const modeLabels = {memory:'Mémoire', math:'Calcul', odd:'Observation', sequence:'Logique', stroop:'Attention'};
   const modeIcons = {memory:'🧠', math:'∑', odd:'◉', sequence:'◇', stroop:'◎'};

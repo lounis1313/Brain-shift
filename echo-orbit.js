@@ -105,7 +105,7 @@
   }
 
   function nodeMarkup(n){
-    const p=PALETTE[n.palette],radius=n.ring===2?'31%':'43%';
+    const p=PALETTE[n.palette],radius=n.ring===2?'clamp(72px,23vw,145px)':'clamp(108px,34vw,205px)';
     return `<button class="echo-satellite ring-${n.ring}" data-node="${n.id}" aria-label="Satellite ${p.name}" style="--angle:${n.angle}deg;--radius:${radius};--echo:${p.hex};--delay:${n.id*-.19}s"><span><i></i></span></button>`;
   }
 
@@ -228,6 +228,7 @@
     }
   };
 
-  document.addEventListener('visibilitychange',()=>{if(document.hidden&&current.mode==='echo')clearEchoTimers()});
+  const previousShowView=showView;
+  showView=function(id){if(id!=='gameView'&&current.mode==='echo')clearEchoTimers();return previousShowView(id)};
   injectEchoCard();updateHome();document.querySelectorAll('.app-version').forEach(x=>x.textContent=ECHO_VERSION.replace(/\.0$/,''));
 })();

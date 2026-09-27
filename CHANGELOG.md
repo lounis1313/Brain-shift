@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.0 — Echo Orbit
+
+- Added **Echo Orbit**, a premium spatial working-memory game built around moving satellites and audiovisual sequences.
+- Added adaptive sequence length, orbit speed and one/two-ring layouts.
+- Expert and Master difficulties can reconfigure and reverse the orbit after memorization, forcing identity tracking instead of static-position recall.
+- Added a dedicated Echo Orbit record, per-mode stats, tutorial and the **Mémoire orbitale** badge.
+- Added responsive motion design, reduced-motion support, musical satellite cues and full offline PWA caching.
+
 ## 1.4.0 — Shift Reactor
 
 - Added **Shift Reactor**, Brain Shift’s first signature game.
