@@ -10,6 +10,7 @@
 - Added responsive and accessibility polish through a dedicated professional UI layer.
 - Added automated repository quality checks and GitHub Actions CI.
 - Added architecture documentation.
+- Release integration validated before deployment with the project quality suite.
 
 ## 1.1.0
 
