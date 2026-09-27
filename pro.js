@@ -1,8 +1,36 @@
 (() => {
   'use strict';
 
-  const PRO_VERSION = '1.5.1';
+  const PRO_VERSION = '2.1.0';
   const modeOrder = ['memory','math','odd','sequence','stroop'];
+  const DAILY_KEY='brainShiftDailyV1';
+  const dailySeed=()=>Number(dayKey().replaceAll('-',''))>>>0;
+  function seeded(seed){let x=seed>>>0;return()=>{x=(Math.imul(1664525,x)+1013904223)>>>0;return x/4294967296}}
+  function dailyTarget(){const r=seeded(dailySeed());return modeOrder[Math.floor(r()*modeOrder.length)]}
+  function dailyStore(){try{return JSON.parse(localStorage.getItem(DAILY_KEY)||'{}')}catch{return {}}}
+  function saveDaily(v){try{localStorage.setItem(DAILY_KEY,JSON.stringify(v))}catch{}}
+  function dailyStatus(){const s=dailyStore(),key=dayKey();return s.date===key?s:{date:key,done:false,score:0,acc:0,speed:0,mode:dailyTarget()}}
+  function injectDailyChallenge(){
+    if(document.getElementById('dailyChallenge'))return;
+    const first=document.querySelector('#homeView .section-block');if(!first)return;
+    const card=document.createElement('section');card.id='dailyChallenge';card.className='daily-challenge glass';first.before(card);refreshDailyChallenge();
+  }
+  function refreshDailyChallenge(){
+    const card=document.getElementById('dailyChallenge');if(!card)return;const s=dailyStatus(),mode=s.mode||dailyTarget();
+    card.innerHTML=`<div><span class="eyebrow">DÉFI COMMUN · ${dayKey().split('-').reverse().join('/')}</span><h2>${s.done?'Défi du jour terminé':'Même défi pour tout le monde'}</h2><p>${s.done?`${modeLabels[mode]} · ${s.score} pts · ${s.acc}% précision`:`${modeLabels[mode]} · une tentative seedée chaque jour`}</p></div><div class="daily-actions"><button class="button ${s.done?'secondary':'primary'}" id="dailyChallengeBtn">${s.done?'Rejouer hors classement':'Jouer le défi'}</button>${s.done?'<button class="mini-button" id="dailyShareBtn">Partager</button>':''}</div>`;
+    document.getElementById('dailyChallengeBtn').onclick=()=>startDailyChallenge(mode,!s.done);
+    document.getElementById('dailyShareBtn')?.addEventListener('click',()=>shareDaily(s));
+  }
+  let dailyRun=null;
+  function startDailyChallenge(mode,official=true){
+    dailyRun={date:dayKey(),mode,official,seed:dailySeed()+modeOrder.indexOf(mode)*9973,oldRandom:Math.random};
+    if(official)Math.random=seeded(dailyRun.seed);
+    requestStartGame(mode);
+  }
+  async function shareDaily(s=dailyStatus()){
+    const text=`Brain Shift · Défi du ${s.date.split('-').reverse().join('/')} — ${modeLabels[s.mode]} · ${s.score} pts · ${s.acc}% précision. À toi de jouer !`;
+    try{if(navigator.share)await navigator.share({title:'Brain Shift — Défi du jour',text,url:location.href});else if(navigator.clipboard){await navigator.clipboard.writeText(text+' '+location.href);showToast('Résultat copié !')}}catch(e){if(e?.name!=='AbortError')showToast('Partage indisponible.')}
+  }
   const modeLabels = {memory:'Mémoire', math:'Calcul', odd:'Observation', sequence:'Logique', stroop:'Attention'};
   const modeIcons = {memory:'🧠', math:'∑', odd:'◉', sequence:'◇', stroop:'◎'};
   const coachState = {active:false,index:0,plan:[],results:[]};
@@ -292,6 +320,9 @@
   const coreFinishGame=finishGame;
   finishGame=function(){
     if(current.quick)return coreFinishGame();
+    const activeDaily=dailyRun&&dailyRun.mode===current.mode;
+    const dailySnapshot=activeDaily?{date:dailyRun.date,mode:current.mode,score:current.score,acc:current.total?Math.round(current.correct/current.total*100):0,speed:speedScore(),done:true}:null;
+    if(activeDaily&&dailyRun.official)Math.random=dailyRun.oldRandom;
     const snapshot={mode:current.mode,score:current.score,acc:current.total?Math.round(current.correct/current.total*100):0,speed:speedScore(),difficulty:effectiveDifficulty(current.mode)};
     const wasCoach=coachState.active,beforeLevel=level(),beforeBadges=data.badges.length,beforeBest=data.best[current.mode]||0,beforeDailyReward=!!data.dailyReward;
     coreFinishGame();
@@ -300,7 +331,8 @@
     else if((data.best[current.mode]||0)>beforeBest)soundFx('record');
     else if(!beforeDailyReward&&data.dailyReward)soundFx('reward');
     else setTimeout(()=>soundFx('finish'),120);
-    pushHistory({type:wasCoach?'coach-leg':'game',...snapshot});
+    pushHistory({type:wasCoach?'coach-leg':activeDaily?'daily':'game',...snapshot});
+    if(activeDaily&&dailySnapshot&&dailyRun.official){saveDaily(dailySnapshot);dailyRun=null;refreshDailyChallenge();setTimeout(()=>{const main=$('resultMainBtn');if(main)main.textContent='Rejouer';const home=$('resultHomeBtn');if(home){const share=document.createElement('button');share.className='button secondary';share.textContent='Partager le défi';share.onclick=()=>shareDaily(dailySnapshot);home.parentElement?.append(share)}},0)}else if(activeDaily){dailyRun=null}
     refreshProUI();
     if(!wasCoach)return;
 
@@ -421,11 +453,11 @@
     let reloading=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(reloading)return;reloading=true;location.reload()});
   }
 
-  function refreshProUI(){refreshCoachCard();refreshSkillProfile();refreshWeekly();updateGameChrome()}
+  function refreshProUI(){refreshCoachCard();refreshDailyChallenge();refreshSkillProfile();refreshWeekly();updateGameChrome()}
 
   const coreUpdateHome=updateHome;
   updateHome=function(){coreUpdateHome();refreshProUI()};
 
-  injectCoachCard();injectSkillProfile();injectWeekly();injectGameChrome();injectNetworkPill();setupPwaUpdates();
+  injectCoachCard();injectDailyChallenge();injectSkillProfile();injectWeekly();injectGameChrome();injectNetworkPill();setupPwaUpdates();
   refreshProUI();saveData();
 })();
