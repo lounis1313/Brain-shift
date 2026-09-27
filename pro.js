@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const PRO_VERSION = '1.2.2';
+  const PRO_VERSION = '1.3.0';
   const modeOrder = ['memory','math','odd','sequence','stroop'];
   const modeLabels = {memory:'Mémoire', math:'Calcul', odd:'Observation', sequence:'Logique', stroop:'Attention'};
   const modeIcons = {memory:'🧠', math:'∑', odd:'◉', sequence:'◇', stroop:'◎'};
@@ -10,7 +10,7 @@
   if (!Array.isArray(data.history)) data.history = [];
   if (!data.pro) data.pro = {version:PRO_VERSION, firstSeenAt:new Date().toISOString()};
   data.pro.version = PRO_VERSION;
-  if (data.pro.soundDesignVersion!=='2'){ data.sound=true; data.pro.soundDesignVersion='2'; }
+  data.pro.soundDesignVersion='3';
 
   const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
 
@@ -138,6 +138,56 @@
   }
 
   document.addEventListener('pointerdown',()=>ensureAudio(),{passive:true});
+
+  // --- V1.3 premium sampled audio -------------------------------------------------
+  // Real short MP3 samples live in assets/audio and are cached by the service worker.
+  // The synthesized V1.2.2 engine remains as an automatic fallback.
+  const synthSoundFx = soundFx;
+  const PREMIUM_SFX={
+    tap:'./assets/audio/tap.mp3',
+    start:'./assets/audio/start.mp3',
+    correct:'./assets/audio/correct.mp3',
+    wrong:'./assets/audio/wrong.mp3',
+    combo:'./assets/audio/combo.mp3',
+    finish:'./assets/audio/finish.mp3',
+    reward:'./assets/audio/reward.mp3',
+    badge:'./assets/audio/badge.mp3',
+    record:'./assets/audio/record.mp3',
+    level:'./assets/audio/level.mp3'
+  };
+  const PREMIUM_VOLUME={tap:.42,start:.56,correct:.62,wrong:.52,combo:.64,finish:.58,reward:.61,badge:.63,record:.66,level:.66};
+  const premiumPools=new Map();
+  const premiumCursor=new Map();
+
+  function premiumKey(name){return name==='coach'?'reward':name}
+  function premiumPool(name){
+    const key=premiumKey(name),src=PREMIUM_SFX[key];
+    if(!src)return null;
+    if(!premiumPools.has(key)){
+      const pool=Array.from({length:key==='tap'?4:2},()=>{
+        const a=new Audio(src);a.preload='auto';a.volume=PREMIUM_VOLUME[key]??.6;return a;
+      });
+      premiumPools.set(key,pool);premiumCursor.set(key,0);
+    }
+    return premiumPools.get(key);
+  }
+  function preloadPremiumSfx(){
+    Object.keys(PREMIUM_SFX).forEach(key=>premiumPool(key));
+  }
+  function playPremiumSfx(name){
+    if(!data.sound)return true;
+    const key=premiumKey(name),pool=premiumPool(key);if(!pool)return false;
+    const idx=premiumCursor.get(key)||0,a=pool[idx%pool.length];premiumCursor.set(key,(idx+1)%pool.length);
+    try{
+      a.pause();a.currentTime=0;
+      const promise=a.play();
+      if(promise?.catch)promise.catch(()=>synthSoundFx(name));
+      return true;
+    }catch{return false}
+  }
+  soundFx=function(name){if(!playPremiumSfx(name))synthSoundFx(name)};
+  window.addEventListener('load',()=>setTimeout(preloadPremiumSfx,250),{once:true});
+
 
   feedback=function(ok){soundFx(ok?(current.combo>=5?'combo':'correct'):'wrong');haptic(ok?12:35)};
 

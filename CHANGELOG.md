@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.0 — Premium sampled audio
+
+- Replaced the primary gameplay feedback with ten real short MP3 micro-samples.
+- Added distinct premium cues for tap, start, correct, wrong, combo, finish, reward, badge, record and level-up.
+- Added a small audio pool to keep repeated taps responsive without clipping important reward sounds.
+- Preserved the procedural Web Audio engine as a fallback when a sample cannot play.
+- Added every sample to the PWA offline cache and CI checks.
+
 ## 1.2.2 — Playful sound design
 
 - Reworked the full audio identity so events are clearly distinguishable by ear.
