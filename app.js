@@ -103,6 +103,7 @@ function updateBadgeGallery(){
   <span class="badge ${data.badges.includes(k)?"":"locked"}">${b.icon}</span><h3>${b.title}</h3><p>${b.desc}</p></article>`).join("");
 }
 function showView(id){
+  const playing=id==="gameView";document.documentElement.classList.toggle("game-active",playing);document.body.classList.toggle("game-active",playing);
   if(id!=="gameView"&&$("gameView").classList.contains("active")){clearGameTimers();current.paused=false;hidePause()}
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));$(id).classList.add("active");
   document.querySelectorAll(".nav-item[data-view]").forEach(n=>n.classList.toggle("active",n.dataset.view===id));
